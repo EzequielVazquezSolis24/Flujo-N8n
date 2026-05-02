@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plan - Open Interpreter con Groq (Gratis)</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #222;
+      background: #fff;
+      padding: 50px;
+      max-width: 920px;
+      margin: 0 auto;
+      font-size: 15px;
+      line-height: 1.75;
+    }
+
+    .cover {
+      background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+      color: white;
+      padding: 50px 40px;
+      border-radius: 16px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    .cover h1 { font-size: 30px; margin-bottom: 10px; }
+    .cover p { font-size: 15px; opacity: 0.85; max-width: 600px; margin: 0 auto; }
+    .cover .badges { margin-top: 18px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .cover .badge {
+      background: rgba(255,255,255,0.15);
+      padding: 5px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+    }
+
+    .section {
+      margin: 30px 0;
+      padding: 28px 30px;
+      border-radius: 12px;
+      background: #fafafa;
+      border-left: 5px solid #0f3460;
+    }
+    .section.green  { border-left-color: #4caf50; }
+    .section.orange { border-left-color: #ff9800; }
+    .section.pink   { border-left-color: #e91e8c; }
+    .section.purple { border-left-color: #9c27b0; }
+    .section.red    { border-left-color: #f44336; }
+    .section.teal   { border-left-color: #009688; }
+
+    h2 { font-size: 20px; margin-bottom: 16px; color: #111; }
+    h3 { font-size: 16px; margin: 20px 0 8px 0; color: #444; font-weight: 600; }
+
+    table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+    th { background: #0f3460; color: white; padding: 10px 14px; text-align: left; }
+    td { padding: 9px 14px; border-bottom: 1px solid #eee; vertical-align: top; }
+    tr:nth-child(even) td { background: #f5f5f5; }
+
+    ul, ol { padding-left: 22px; margin: 10px 0; }
+    li { margin: 7px 0; }
+
+    code {
+      background: #f0f0f0;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      color: #c0392b;
+    }
+    pre {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 18px 22px;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      overflow-x: auto;
+      margin: 14px 0;
+      line-height: 1.65;
+    }
+    pre .comment { color: #6a9955; }
+    pre .string  { color: #ce9178; }
+    pre .keyword { color: #569cd6; }
+
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin: 18px 0;
+      padding: 18px;
+      background: white;
+      border-radius: 10px;
+      border: 1px solid #e0e0e0;
+    }
+    .step-num {
+      background: #0f3460;
+      color: white;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+    .step-num.green  { background: #4caf50; }
+    .step-num.orange { background: #ff9800; }
+    .step-num.pink   { background: #e91e8c; }
+    .step-content { flex: 1; }
+    .step-content h4 { font-size: 15px; margin-bottom: 6px; }
+
+    .alert {
+      padding: 12px 18px;
+      border-radius: 6px;
+      margin: 14px 0;
+      font-size: 14px;
+    }
+    .alert.yellow { background: #fff8e1; border-left: 4px solid #ffc107; }
+    .alert.green  { background: #e8f5e9; border-left: 4px solid #4caf50; }
+    .alert.blue   { background: #e3f2fd; border-left: 4px solid #2196f3; }
+    .alert.red    { background: #ffebee; border-left: 4px solid #f44336; }
+
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 16px 0;
+    }
+    .compare-card {
+      padding: 18px;
+      border-radius: 10px;
+      border: 2px solid #eee;
+    }
+    .compare-card.winner { border-color: #4caf50; background: #f1f8e9; }
+    .compare-card h4 { font-size: 15px; margin-bottom: 10px; }
+
+    .chip {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      margin: 2px;
+      font-weight: bold;
+    }
+    .chip.green  { background: #e8f5e9; color: #2e7d32; }
+    .chip.red    { background: #ffebee; color: #c62828; }
+    .chip.blue   { background: #e3f2fd; color: #1565c0; }
+    .chip.gray   { background: #f5f5f5; color: #555; }
+
+    .flow {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 16px 0;
+    }
+    .flow-step {
+      background: white;
+      border: 2px solid #0f3460;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: bold;
+      color: #0f3460;
+    }
+    .flow-arrow { font-size: 20px; color: #bbb; }
+
+    .footer {
+      text-align: center;
+      margin-top: 50px;
+      padding: 20px;
+      color: #aaa;
+      font-size: 12px;
+      border-top: 1px solid #eee;
+    }
+
+    @media print { body { padding: 20px; } .section { break-inside: avoid; } }
+  </style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div class="cover">
+  <h1>🤖 Open Interpreter + Groq</h1>
+  <p>Plan completo para tener un agente de IA que ejecuta cosas en tu computadora, gratis, sin descargar ningún modelo local</p>
+  <div class="badges">
+    <span class="badge">✅ 100% Gratis</span>
+    <span class="badge">⚡ Sin modelo local</span>
+    <span class="badge">🖥️ Ejecuta en tu PC</span>
+    <span class="badge">🔌 API externa</span>
+  </div>
+</div>
+
+<!-- QUÉ ES -->
+<div class="section">
+  <h2>🧠 ¿Qué es Open Interpreter y por qué lo usamos?</h2>
+
+  <p>Open Interpreter es la versión <strong>open source</strong> de Claude Code. Le das instrucciones en lenguaje natural y él ejecuta código, edita archivos, instala cosas, navega la web y hace casi todo lo que haría Claude Code — pero conectado a la API que vos elijas.</p>
+
+  <div class="compare">
+    <div class="compare-card">
+      <h4>🔵 Claude Code</h4>
+      <ul>
+        <li>Oficial de Anthropic</li>
+        <li>Requiere suscripción Pro ($20/mes) o créditos de API</li>
+        <li>Solo usa modelos de Claude</li>
+        <li>Muy pulido y estable</li>
+      </ul>
+    </div>
+    <div class="compare-card winner">
+      <h4>🟢 Open Interpreter + Groq ← ESTA OPCIÓN</h4>
+      <ul>
+        <li>Open source, gratis</li>
+        <li>Groq tiene free tier generoso</li>
+        <li>Soporta Groq, Gemini, DeepSeek, OpenRouter</li>
+        <li>Hace lo mismo: ejecuta en tu PC</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>¿Qué puede hacer en tu computadora?</h3>
+  <ul>
+    <li>Ejecutar comandos de terminal</li>
+    <li>Crear, editar y borrar archivos</li>
+    <li>Instalar paquetes y programas</li>
+    <li>Correr scripts de Python, Node, etc.</li>
+    <li>Navegar la web y extraer información</li>
+    <li>Trabajar con imágenes y PDFs</li>
+    <li>Controlar tu flujo de n8n via API</li>
+  </ul>
+</div>
+
+<!-- PROVIDERS GRATUITOS -->
+<div class="section green">
+  <h2>🆓 Proveedores gratuitos disponibles</h2>
+
+  <table>
+    <tr><th>Proveedor</th><th>Modelo recomendado</th><th>Límite gratis</th><th>Velocidad</th></tr>
+    <tr>
+      <td><strong>🥇 Groq</strong> ← RECOMENDADO</td>
+      <td>Llama 3.3 70B Versatile</td>
+      <td>14.400 req/día</td>
+      <td>⚡ Muy rápido</td>
+    </tr>
+    <tr>
+      <td><strong>🥈 Google Gemini</strong></td>
+      <td>Gemini 2.0 Flash</td>
+      <td>1.500 req/día</td>
+      <td>✅ Rápido</td>
+    </tr>
+    <tr>
+      <td><strong>🥉 OpenRouter</strong></td>
+      <td>Varios (rotativos)</td>
+      <td>Créditos gratis al registrarse</td>
+      <td>Variable</td>
+    </tr>
+    <tr>
+      <td>DeepSeek</td>
+      <td>deepseek-chat</td>
+      <td>No gratis, pero ~$0.001</td>
+      <td>✅ Bueno</td>
+    </tr>
+  </table>
+
+  <div class="alert blue">
+    💡 <strong>Recomendación:</strong> Empezar con <strong>Groq</strong>. Es el más rápido, tiene el límite más generoso y Llama 3.3 70B es muy capaz para tareas de código y automatización.
+  </div>
+</div>
+
+<!-- PASO A PASO -->
+<div class="section orange">
+  <h2>📋 Plan paso a paso</h2>
+
+  <!-- PASO 1 -->
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-content">
+      <h4>Obtener API Key de Groq (gratis)</h4>
+      <ol>
+        <li>Ir a <code>console.groq.com</code></li>
+        <li>Crear cuenta (puede ser con Google)</li>
+        <li>Ir a <strong>API Keys</strong> → <strong>Create API Key</strong></li>
+        <li>Copiar y guardar la key — empieza con <code>gsk_...</code></li>
+      </ol>
+      <div class="alert green">✅ No pide tarjeta de crédito. Es gratis directamente.</div>
+    </div>
+  </div>
+
+  <!-- PASO 2 -->
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-content">
+      <h4>Verificar que tenés Python instalado</h4>
+      <p>Abrir la terminal y correr:</p>
+      <pre>python --version
+<span class="comment"># Necesitás Python 3.10 o superior</span>
+<span class="comment"># Si no lo tenés: python.org → Download</span></pre>
+    </div>
+  </div>
+
+  <!-- PASO 3 -->
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-content">
+      <h4>Instalar Open Interpreter</h4>
+      <pre><span class="comment"># En la terminal:</span>
+pip install open-interpreter</pre>
+      <div class="alert yellow">⚠️ Si da error de permisos, usar: <code>pip install open-interpreter --user</code></div>
+    </div>
+  </div>
+
+  <!-- PASO 4 -->
+  <div class="step">
+    <div class="step-num green">4</div>
+    <div class="step-content">
+      <h4>Configurar con Groq y correr por primera vez</h4>
+      <pre><span class="comment"># Opción A: directo desde terminal (reemplaza TU_KEY con tu API key)</span>
+interpreter --api_base https://api.groq.com/openai/v1 \
+            --api_key TU_KEY_DE_GROQ \
+            --model groq/llama-3.3-70b-versatile</pre>
+
+      <pre><span class="comment"># Opción B: con variable de entorno (más cómodo)</span>
+
+<span class="comment"># En Linux/Mac, agregar al .bashrc o .zshrc:</span>
+export GROQ_API_KEY="TU_KEY_DE_GROQ"
+
+<span class="comment"># Luego correr simplemente:</span>
+interpreter --api_base https://api.groq.com/openai/v1 \
+            --model groq/llama-3.3-70b-versatile</pre>
+
+      <div class="alert green">✅ Si ves el prompt <code>&gt;</code> aparecer, ya está funcionando.</div>
+    </div>
+  </div>
+
+  <!-- PASO 5 -->
+  <div class="step">
+    <div class="step-num orange">5</div>
+    <div class="step-content">
+      <h4>Crear archivo de configuración permanente (recomendado)</h4>
+      <p>Para no tener que escribir los flags cada vez, crear el archivo de config:</p>
+      <pre><span class="comment"># Ruta del archivo:</span>
+<span class="comment"># Linux/Mac: ~/.config/open-interpreter/config.yaml</span>
+<span class="comment"># Windows:   C:\Users\TU_USUARIO\.config\open-interpreter\config.yaml</span></pre>
+
+      <p>Contenido del archivo <code>config.yaml</code>:</p>
+      <pre>model: groq/llama-3.3-70b-versatile
+api_base: https://api.groq.com/openai/v1
+api_key: TU_KEY_DE_GROQ
+<span class="comment"># Opcional: confirmar antes de ejecutar comandos</span>
+safe_mode: ask
+<span class="comment"># Opcional: idioma español</span>
+system_message: "Responde siempre en español."</pre>
+
+      <p>Con eso, para iniciar solo necesitás escribir:</p>
+      <pre>interpreter</pre>
+    </div>
+  </div>
+
+  <!-- PASO 6 -->
+  <div class="step">
+    <div class="step-num pink">6</div>
+    <div class="step-content">
+      <h4>Primera prueba — verificar que funciona</h4>
+      <p>Una vez en el prompt <code>&gt;</code>, escribir:</p>
+      <pre><span class="string">"Creá un archivo llamado prueba.txt en el escritorio con el texto Hola mundo"</span></pre>
+      <p>Si lo crea, <strong>todo está funcionando correctamente.</strong></p>
+    </div>
+  </div>
+</div>
+
+<!-- USO PARA EL PROYECTO -->
+<div class="section pink">
+  <h2>🎯 Cómo usarlo en tu proyecto de Instagram IA</h2>
+
+  <h3>Ejemplos de comandos reales que podés usar:</h3>
+
+  <table>
+    <tr><th>Lo que decís</th><th>Lo que hace</th></tr>
+    <tr>
+      <td>"Abrí el PDF de tendencias de hoy y resumime los puntos clave"</td>
+      <td>Lee el PDF del escritorio y te da el resumen</td>
+    </tr>
+    <tr>
+      <td>"Revisá el flujo de n8n y decime si hay algún error en el JSON"</td>
+      <td>Lee flujo-tendencias-instagram.json y lo analiza</td>
+    </tr>
+    <tr>
+      <td>"Generame 5 prompts para Midjourney basados en este brief"</td>
+      <td>Lee el brief y genera los prompts</td>
+    </tr>
+    <tr>
+      <td>"Creá una carpeta nueva en Drive con la fecha de hoy vía la API"</td>
+      <td>Ejecuta el script de Python para Drive</td>
+    </tr>
+    <tr>
+      <td>"Instalá la librería que falta en el script de Python"</td>
+      <td>Corre pip install automáticamente</td>
+    </tr>
+    <tr>
+      <td>"Chequeá si n8n está corriendo y reinicialo si no"</td>
+      <td>Ejecuta comandos de sistema</td>
+    </tr>
+  </table>
+
+  <h3>Flujo combinado con tu automatización:</h3>
+  <div class="flow">
+    <div class="flow-step">n8n genera PDF</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">PDF llega al Desktop</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Open Interpreter lo lee</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Genera prompt de imagen</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Llama a API de imagen</div>
+  </div>
+</div>
+
+<!-- ALTERNATIVA: CLINE -->
+<div class="section purple">
+  <h2>🔌 Alternativa: Cline en VS Code</h2>
+  <p>Si preferís trabajar desde VS Code en lugar de la terminal:</p>
+
+  <div class="step">
+    <div class="step-num" style="background:#9c27b0">1</div>
+    <div class="step-content">
+      <h4>Instalar Cline</h4>
+      <ol>
+        <li>Abrir VS Code</li>
+        <li>Extensions (Ctrl+Shift+X)</li>
+        <li>Buscar <strong>"Cline"</strong> e instalar</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num" style="background:#9c27b0">2</div>
+    <div class="step-content">
+      <h4>Configurar con Groq</h4>
+      <ol>
+        <li>Click en el ícono de Cline en la barra lateral</li>
+        <li>Settings → API Provider → seleccionar <strong>OpenAI Compatible</strong></li>
+        <li>Base URL: <code>https://api.groq.com/openai/v1</code></li>
+        <li>API Key: tu key de Groq</li>
+        <li>Model: <code>llama-3.3-70b-versatile</code></li>
+      </ol>
+    </div>
+  </div>
+
+  <table>
+    <tr><th></th><th>Open Interpreter</th><th>Cline</th></tr>
+    <tr><td>Entorno</td><td>Terminal</td><td>VS Code</td></tr>
+    <tr><td>Ideal para</td><td>Automatización, scripts</td><td>Programar, editar código</td></tr>
+    <tr><td>Instalación</td><td>pip install</td><td>Extensión VS Code</td></tr>
+    <tr><td>Gratis con Groq</td><td>✅</td><td>✅</td></tr>
+  </table>
+
+  <div class="alert blue">
+    💡 <strong>Recomendación:</strong> Instalar los dos. Open Interpreter para automatizaciones y tareas del sistema. Cline para cuando editás código del proyecto.
+  </div>
+</div>
+
+<!-- TROUBLESHOOTING -->
+<div class="section red">
+  <h2>🔧 Problemas comunes y soluciones</h2>
+
+  <table>
+    <tr><th>Error</th><th>Causa</th><th>Solución</th></tr>
+    <tr>
+      <td><code>command not found: interpreter</code></td>
+      <td>Python no está en el PATH</td>
+      <td>Usar <code>python -m interpreter</code></td>
+    </tr>
+    <tr>
+      <td><code>401 Unauthorized</code></td>
+      <td>API key incorrecta</td>
+      <td>Verificar que copiaste la key completa desde Groq</td>
+    </tr>
+    <tr>
+      <td><code>Rate limit exceeded</code></td>
+      <td>Llegaste al límite de Groq</td>
+      <td>Esperar o cambiar a Gemini API temporalmente</td>
+    </tr>
+    <tr>
+      <td>Se congela sin responder</td>
+      <td>El modelo está procesando</td>
+      <td>Esperar 10-15 segundos, Groq es muy rápido normalmente</td>
+    </tr>
+    <tr>
+      <td><code>ModuleNotFoundError</code></td>
+      <td>Falta una dependencia</td>
+      <td><code>pip install open-interpreter[all]</code></td>
+    </tr>
+  </table>
+</div>
+
+<!-- RESUMEN RÁPIDO -->
+<div class="section teal">
+  <h2>⚡ Resumen ultra rápido — 3 comandos para empezar</h2>
+
+  <pre><span class="comment"># 1. Instalar</span>
+pip install open-interpreter
+
+<span class="comment"># 2. Correr con Groq (reemplazar la key)</span>
+interpreter --api_base https://api.groq.com/openai/v1 --api_key gsk_TU_KEY --model groq/llama-3.3-70b-versatile
+
+<span class="comment"># 3. Primera prueba dentro del chat</span>
+<span class="string">"Mostrame los archivos que hay en el escritorio"</span></pre>
+
+  <div class="alert green">
+    ✅ Si responde con la lista de archivos, ya tenés tu propio Claude Code gratis funcionando.
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p>📁 Repositorio: <strong>ezequielvazquezsolis24/flujo-n8n</strong> · Rama: <strong>claude/document-skills-mxkVM</strong></p>
+  <p style="margin-top:6px">Para convertir a PDF: abre este archivo en el navegador → Ctrl+P → Guardar como PDF</p>
+</div>
+
+</body>
+</html>
