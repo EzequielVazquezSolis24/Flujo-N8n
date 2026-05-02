@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plan - Entorno Local con IA</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #222;
+      background: #fff;
+      padding: 50px;
+      max-width: 920px;
+      margin: 0 auto;
+      font-size: 15px;
+      line-height: 1.75;
+    }
+    .cover {
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: white;
+      padding: 50px 40px;
+      border-radius: 16px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    .cover h1 { font-size: 30px; margin-bottom: 10px; }
+    .cover p { font-size: 15px; opacity: 0.85; max-width: 600px; margin: 0 auto; }
+    .cover .badges { margin-top: 18px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .cover .badge { background: rgba(255,255,255,0.15); padding: 5px 16px; border-radius: 20px; font-size: 13px; }
+
+    .section { margin: 30px 0; padding: 28px 30px; border-radius: 12px; background: #fafafa; border-left: 5px solid #2c5364; }
+    .section.green  { border-left-color: #4caf50; }
+    .section.orange { border-left-color: #ff9800; }
+    .section.pink   { border-left-color: #e91e8c; }
+    .section.purple { border-left-color: #9c27b0; }
+    .section.teal   { border-left-color: #009688; }
+    .section.red    { border-left-color: #f44336; }
+
+    h2 { font-size: 20px; margin-bottom: 16px; color: #111; }
+    h3 { font-size: 16px; margin: 20px 0 8px 0; color: #444; font-weight: 600; }
+
+    table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+    th { background: #2c5364; color: white; padding: 10px 14px; text-align: left; }
+    td { padding: 9px 14px; border-bottom: 1px solid #eee; vertical-align: top; }
+    tr:nth-child(even) td { background: #f5f5f5; }
+
+    ul, ol { padding-left: 22px; margin: 10px 0; }
+    li { margin: 7px 0; }
+
+    code { background: #f0f0f0; padding: 2px 8px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 13px; color: #c0392b; }
+    pre { background: #1e1e1e; color: #d4d4d4; padding: 18px 22px; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 13px; overflow-x: auto; margin: 14px 0; line-height: 1.65; }
+    pre .comment { color: #6a9955; }
+    pre .string  { color: #ce9178; }
+
+    .step { display: flex; align-items: flex-start; gap: 16px; margin: 18px 0; padding: 18px; background: white; border-radius: 10px; border: 1px solid #e0e0e0; }
+    .step-num { background: #2c5364; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 15px; flex-shrink: 0; }
+    .step-num.green  { background: #4caf50; }
+    .step-num.orange { background: #ff9800; }
+    .step-num.purple { background: #9c27b0; }
+    .step-num.pink   { background: #e91e8c; }
+    .step-content { flex: 1; }
+    .step-content h4 { font-size: 15px; margin-bottom: 8px; }
+
+    .alert { padding: 12px 18px; border-radius: 6px; margin: 14px 0; font-size: 14px; }
+    .alert.yellow { background: #fff8e1; border-left: 4px solid #ffc107; }
+    .alert.green  { background: #e8f5e9; border-left: 4px solid #4caf50; }
+    .alert.blue   { background: #e3f2fd; border-left: 4px solid #2196f3; }
+
+    .stack { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 16px 0; }
+    .stack-card { background: white; border: 2px solid #e0e0e0; border-radius: 10px; padding: 16px; text-align: center; }
+    .stack-card .icon { font-size: 28px; margin-bottom: 8px; }
+    .stack-card h4 { font-size: 14px; margin-bottom: 4px; }
+    .stack-card p { font-size: 12px; color: #777; }
+    .stack-card.highlight { border-color: #4caf50; background: #f1f8e9; }
+
+    .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+    .flow-step { background: white; border: 2px solid #2c5364; border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: bold; color: #2c5364; }
+    .flow-arrow { font-size: 20px; color: #bbb; }
+
+    .cmd-list { list-style: none; padding: 0; }
+    .cmd-list li { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid #eee; font-size: 14px; }
+    .cmd-list li code { white-space: nowrap; }
+
+    .footer { text-align: center; margin-top: 50px; padding: 20px; color: #aaa; font-size: 12px; border-top: 1px solid #eee; }
+    @media print { body { padding: 20px; } .section { break-inside: avoid; } }
+  </style>
+</head>
+<body>
+
+<div class="cover">
+  <h1>🖥️ Entorno Local con IA</h1>
+  <p>Plan completo para controlar tu computadora con inteligencia artificial desde Telegram, usando Gemini 2.5 Pro gratis</p>
+  <div class="badges">
+    <span class="badge">✅ Gemini 2.5 Pro gratis</span>
+    <span class="badge">📱 Control por Telegram</span>
+    <span class="badge">🖱️ Controla mouse y pantalla</span>
+    <span class="badge">🤖 Open Interpreter OS Mode</span>
+  </div>
+</div>
+
+<!-- QUÉ ESTAMOS CONSTRUYENDO -->
+<div class="section">
+  <h2>🎯 ¿Qué estamos construyendo?</h2>
+  <p>Un sistema donde vos le mandás un mensaje por Telegram desde cualquier lugar, y tu computadora lo ejecuta sola — abre programas, mueve el mouse, sube contenido, revisa archivos, controla n8n y todo lo que necesites para el proyecto de Instagram IA.</p>
+
+  <div class="flow" style="margin-top:20px">
+    <div class="flow-step">📱 Telegram</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">🤖 Bot Python</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">🧠 Gemini 2.5 Pro</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">⚙️ Open Interpreter</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">🖥️ Tu PC</div>
+  </div>
+
+  <h3>El stack completo</h3>
+  <div class="stack">
+    <div class="stack-card highlight">
+      <div class="icon">🧠</div>
+      <h4>Gemini 2.5 Pro</h4>
+      <p>El cerebro. Ve la pantalla, planea y decide qué hacer. Gratis.</p>
+    </div>
+    <div class="stack-card highlight">
+      <div class="icon">⚙️</div>
+      <h4>Open Interpreter</h4>
+      <p>Ejecuta las acciones en tu PC: mouse, teclado, archivos, comandos.</p>
+    </div>
+    <div class="stack-card highlight">
+      <div class="icon">📱</div>
+      <h4>Bot de Telegram</h4>
+      <p>La interfaz. Das órdenes y recibís resultados desde el celular.</p>
+    </div>
+  </div>
+</div>
+
+<!-- PRERREQUISITOS -->
+<div class="section green">
+  <h2>✅ Prerrequisitos — verificar antes de empezar</h2>
+  <table>
+    <tr><th>Requisito</th><th>Cómo verificar</th><th>Dónde conseguir</th></tr>
+    <tr><td>Python 3.10+</td><td><code>python --version</code></td><td>python.org</td></tr>
+    <tr><td>pip actualizado</td><td><code>pip --version</code></td><td>Viene con Python</td></tr>
+    <tr><td>Cuenta Google</td><td>—</td><td>accounts.google.com</td></tr>
+    <tr><td>Cuenta Telegram</td><td>—</td><td>telegram.org</td></tr>
+    <tr><td>n8n corriendo local</td><td><code>http://localhost:5678</code></td><td>Ya instalado</td></tr>
+  </table>
+</div>
+
+<!-- PASOS -->
+<div class="section orange">
+  <h2>📋 Pasos de instalación</h2>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-content">
+      <h4>Obtener API Key de Gemini 2.5 Pro (gratis)</h4>
+      <ol>
+        <li>Ir a <code>aistudio.google.com</code></li>
+        <li>Iniciar sesión con Google</li>
+        <li>Click en <strong>"Get API Key"</strong> → <strong>"Create API key"</strong></li>
+        <li>Copiar la key — empieza con <code>AIza...</code></li>
+      </ol>
+      <div class="alert green">✅ Gratis: 1.500 requests/día. Sin tarjeta de crédito.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-content">
+      <h4>Crear el Bot de Telegram</h4>
+      <ol>
+        <li>Abrir Telegram y buscar <strong>@BotFather</strong></li>
+        <li>Escribir <code>/newbot</code></li>
+        <li>Poner nombre: <strong>Mi PC IA</strong> (o el que quieras)</li>
+        <li>Poner username: algo como <strong>mipcia_bot</strong></li>
+        <li>BotFather te da el token — guardarlo, empieza con números y tiene <code>:</code> en el medio</li>
+      </ol>
+      <div class="alert blue">💡 Ese token es la contraseña de tu bot. No lo compartas.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-content">
+      <h4>Obtener tu Telegram User ID</h4>
+      <ol>
+        <li>Buscar en Telegram: <strong>@userinfobot</strong></li>
+        <li>Escribirle cualquier mensaje</li>
+        <li>Te responde con tu ID — es un número como <code>123456789</code></li>
+        <li>Guardar ese número — es tu ID de seguridad</li>
+      </ol>
+      <div class="alert yellow">⚠️ Este ID es importante: solo vos vas a poder controlar el bot.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num green">4</div>
+    <div class="step-content">
+      <h4>Instalar dependencias</h4>
+      <p>En la terminal, dentro de la carpeta <code>entorno-local/</code>:</p>
+      <pre><span class="comment"># Instalar todo de una vez</span>
+pip install -r requirements.txt</pre>
+      <p>O manualmente:</p>
+      <pre>pip install open-interpreter python-telegram-bot python-dotenv Pillow</pre>
+      <div class="alert yellow">⚠️ Si open-interpreter tarda, es normal. Pesa bastante.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num orange">5</div>
+    <div class="step-content">
+      <h4>Configurar el archivo .env</h4>
+      <ol>
+        <li>Copiar el archivo <code>.env.example</code> y renombrarlo a <code>.env</code></li>
+        <li>Completar las 3 variables con tus datos:</li>
+      </ol>
+      <pre>TELEGRAM_BOT_TOKEN=tu_token_del_bot
+TELEGRAM_USER_ID=tu_id_de_telegram
+GEMINI_API_KEY=tu_api_key_AIza...</pre>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num purple">6</div>
+    <div class="step-content">
+      <h4>Correr el bot</h4>
+      <pre><span class="comment"># En la terminal, dentro de entorno-local/</span>
+python telegram-bot.py</pre>
+      <p>Deberías ver:</p>
+      <pre><span class="string">🤖 Bot iniciado. Esperando mensajes de Telegram...</span>
+<span class="string">✅ Gemini 2.5 Pro conectado</span>
+<span class="string">✅ OS Mode habilitado</span></pre>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num pink">7</div>
+    <div class="step-content">
+      <h4>Primera prueba desde Telegram</h4>
+      <ol>
+        <li>Abrir el bot en Telegram</li>
+        <li>Escribir <code>/start</code> — debe responder</li>
+        <li>Escribir: <strong>"Creá un archivo llamado prueba.txt en el escritorio"</strong></li>
+        <li>Verificar que el archivo apareció en tu PC</li>
+      </ol>
+      <div class="alert green">✅ Si funciona, ya tenés control total de tu PC desde el celular.</div>
+    </div>
+  </div>
+</div>
+
+<!-- COMANDOS DISPONIBLES -->
+<div class="section teal">
+  <h2>📱 Comandos del Bot</h2>
+  <ul class="cmd-list">
+    <li><code>/start</code> — Activa el bot y muestra bienvenida</li>
+    <li><code>/status</code> — Muestra si todo está funcionando</li>
+    <li><code>/screenshot</code> — Te manda una foto de tu pantalla actual</li>
+    <li><code>/reset</code> — Limpia el historial de conversación del intérprete</li>
+    <li><code>/stop</code> — Detiene la tarea que está ejecutando</li>
+    <li>Cualquier texto — Open Interpreter lo ejecuta en tu PC</li>
+  </ul>
+
+  <h3>Ejemplos de órdenes para tu proyecto Instagram IA</h3>
+  <table>
+    <tr><th>Escribís en Telegram</th><th>Tu PC hace</th></tr>
+    <tr><td>"Abrí el PDF de tendencias de hoy y resumime qué tipo de contenido hacer"</td><td>Lee el PDF del escritorio y analiza</td></tr>
+    <tr><td>"Generá el prompt para Midjourney basado en el brief de hoy"</td><td>Lee el brief y escribe el prompt</td></tr>
+    <tr><td>"Revisá si el flujo de n8n corrió bien hoy"</td><td>Abre n8n y revisa los logs</td></tr>
+    <tr><td>"Subí la imagen de hoy a Instagram"</td><td>Abre el navegador y sube la imagen</td></tr>
+    <tr><td>"Mandame un screenshot de lo que está pasando en la PC"</td><td>Te envía foto de la pantalla</td></tr>
+    <tr><td>"Chequeá cuánto gasté en APIs este mes"</td><td>Revisa logs y calcula el costo</td></tr>
+  </table>
+</div>
+
+<!-- PARA DEJAR CORRIENDO SIEMPRE -->
+<div class="section purple">
+  <h2>🔄 Dejar el bot corriendo siempre (automático)</h2>
+  <p>Para que el bot arranque solo cuando prendés la PC:</p>
+
+  <h3>En Windows — Tarea programada</h3>
+  <pre><span class="comment"># En PowerShell como administrador:</span>
+$action = New-ScheduledTaskAction -Execute "python" -Argument "C:\ruta\entorno-local\telegram-bot.py"
+$trigger = New-ScheduledTaskTrigger -AtLogOn
+Register-ScheduledTask -TaskName "BotIA" -Action $action -Trigger $trigger</pre>
+
+  <h3>En Linux/Mac — systemd o PM2</h3>
+  <pre><span class="comment"># Con PM2 (más simple):</span>
+npm install -g pm2
+pm2 start telegram-bot.py --interpreter python
+pm2 startup  <span class="comment"># para que arranque solo</span>
+pm2 save</pre>
+</div>
+
+<!-- TROUBLESHOOTING -->
+<div class="section red">
+  <h2>🔧 Problemas comunes</h2>
+  <table>
+    <tr><th>Error</th><th>Solución</th></tr>
+    <tr><td>Bot no responde</td><td>Verificar que el script esté corriendo en la terminal</td></tr>
+    <tr><td><code>401 Unauthorized</code></td><td>Token del bot incorrecto en el .env</td></tr>
+    <tr><td><code>Quota exceeded</code> Gemini</td><td>Esperá hasta el día siguiente (límite diario) o usá Groq como backup</td></tr>
+    <tr><td>OS Mode no controla pantalla</td><td>En Windows: correr como administrador. En Linux: dar permisos de display</td></tr>
+    <tr><td>El bot responde a otros usuarios</td><td>Verificar que TELEGRAM_USER_ID esté correcto en el .env</td></tr>
+  </table>
+</div>
+
+<div class="footer">
+  <p>📁 Repositorio: <strong>ezequielvazquezsolis24/flujo-n8n</strong> · Carpeta: <strong>entorno-local/</strong></p>
+  <p style="margin-top:6px">Para convertir a PDF: abre este archivo en el navegador → Ctrl+P → Guardar como PDF</p>
+</div>
+
+</body>
+</html>
