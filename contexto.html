@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contexto del Proyecto - AI Instagram Model</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #222;
+      background: #fff;
+      padding: 50px;
+      max-width: 900px;
+      margin: 0 auto;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    /* PORTADA */
+    .cover {
+      background: linear-gradient(135deg, #e91e8c, #9c27b0, #3f51b5);
+      color: white;
+      padding: 50px 40px;
+      border-radius: 16px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    .cover h1 { font-size: 32px; margin-bottom: 10px; }
+    .cover p { font-size: 15px; opacity: 0.9; }
+    .cover .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-size: 13px;
+      margin-top: 14px;
+    }
+
+    /* SECCIONES */
+    .section {
+      margin: 35px 0;
+      padding: 28px 30px;
+      border-radius: 12px;
+      border-left: 5px solid #e91e8c;
+      background: #fafafa;
+    }
+    .section.purple { border-left-color: #9c27b0; }
+    .section.blue   { border-left-color: #3f51b5; }
+    .section.green  { border-left-color: #4caf50; }
+    .section.orange { border-left-color: #ff9800; }
+
+    h2 {
+      font-size: 20px;
+      margin-bottom: 16px;
+      color: #111;
+    }
+    h3 {
+      font-size: 16px;
+      margin: 18px 0 8px 0;
+      color: #555;
+    }
+
+    /* TABLA */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 14px;
+    }
+    th {
+      background: #e91e8c;
+      color: white;
+      padding: 10px 14px;
+      text-align: left;
+    }
+    td {
+      padding: 9px 14px;
+      border-bottom: 1px solid #eee;
+    }
+    tr:nth-child(even) td { background: #f5f5f5; }
+
+    /* LISTAS */
+    ul, ol { padding-left: 22px; margin: 10px 0; }
+    li { margin: 6px 0; }
+
+    /* CÓDIGO/PATHS */
+    code {
+      background: #f0f0f0;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      color: #c0392b;
+    }
+    pre {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 18px 20px;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      overflow-x: auto;
+      margin: 14px 0;
+      line-height: 1.6;
+    }
+
+    /* CHIPS */
+    .chip {
+      display: inline-block;
+      background: #e91e8c;
+      color: white;
+      padding: 3px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      margin: 3px 3px 3px 0;
+    }
+    .chip.purple { background: #9c27b0; }
+    .chip.blue   { background: #3f51b5; }
+    .chip.green  { background: #4caf50; }
+    .chip.gray   { background: #757575; }
+
+    /* FLUJO VISUAL */
+    .flow {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 16px 0;
+    }
+    .flow-step {
+      background: #fff;
+      border: 2px solid #e91e8c;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: bold;
+      color: #e91e8c;
+    }
+    .flow-arrow {
+      font-size: 20px;
+      color: #bbb;
+    }
+
+    /* ALERTA */
+    .alert {
+      background: #fff8e1;
+      border-left: 4px solid #ffc107;
+      padding: 14px 18px;
+      border-radius: 4px;
+      margin: 14px 0;
+      font-size: 14px;
+    }
+
+    /* FOOTER */
+    .footer {
+      text-align: center;
+      margin-top: 50px;
+      padding: 20px;
+      color: #aaa;
+      font-size: 12px;
+      border-top: 1px solid #eee;
+    }
+
+    /* PRINT */
+    @media print {
+      body { padding: 20px; }
+      .section { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PORTADA -->
+  <div class="cover">
+    <h1>🤖 AI Instagram Model</h1>
+    <p>Contexto del proyecto y documentación del flujo de automatización</p>
+    <div class="badge">📅 Generado: 2 de Mayo 2026</div>
+  </div>
+
+  <!-- 1. PERFIL DE INSTAGRAM -->
+  <div class="section">
+    <h2>📱 1. Perfil de Instagram - Estado Actual y Mejoras</h2>
+
+    <h3>Estado actual del perfil</h3>
+    <table>
+      <tr><th>Campo</th><th>Valor actual</th><th>Estado</th></tr>
+      <tr><td>Username</td><td>cuentafree3348</td><td>⚠️ Mejorar</td></tr>
+      <tr><td>Nombre</td><td>Ezequiel VZ</td><td>✅ Aceptable</td></tr>
+      <tr><td>Foto de perfil</td><td>Avatar genérico</td><td>❌ Falta</td></tr>
+      <tr><td>Biografía</td><td>Sin bio (placeholder)</td><td>❌ Falta</td></tr>
+      <tr><td>Publicaciones</td><td>0</td><td>❌ Falta</td></tr>
+      <tr><td>Seguidores</td><td>15</td><td>📊 Inicio</td></tr>
+      <tr><td>Siguiendo</td><td>63</td><td>📊 Normal</td></tr>
+    </table>
+
+    <h3>Acciones prioritarias</h3>
+    <ol>
+      <li><strong>Foto de perfil</strong> — Foto real, bien iluminada, cara centrada</li>
+      <li><strong>Cambiar username</strong> — Algo personal como <code>ezequielvz</code> o <code>ezevazquez</code></li>
+      <li><strong>Bio (150 caracteres)</strong> — Ejemplo: <em>"Ezequiel VZ | Lo que me gusta, lo que hago 📍 Argentina"</em></li>
+      <li><strong>Primeras publicaciones</strong> — Al menos 3-5 fotos para no verse abandonado</li>
+    </ol>
+  </div>
+
+  <!-- 2. IDEA DEL PROYECTO -->
+  <div class="section purple">
+    <h2>💡 2. Idea del Proyecto - Modelo de Instagram creada por IA</h2>
+
+    <p>El objetivo es crear y gestionar una <strong>cuenta de Instagram de una modelo generada por IA</strong>, con contenido automatizado diariamente basado en tendencias reales de redes sociales.</p>
+
+    <h3>Plataformas objetivo</h3>
+    <span class="chip">Instagram</span>
+    <span class="chip">TikTok</span>
+
+    <h3>Concepto del flujo completo</h3>
+    <div class="flow">
+      <div class="flow-step">Perplexity</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">DeepSeek</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">PDF / Drive</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Claude AI</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Generar Video/Imagen</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Instagram / TikTok</div>
+    </div>
+  </div>
+
+  <!-- 3. FLUJO N8N - PARTE 1 -->
+  <div class="section blue">
+    <h2>⚙️ 3. Flujo n8n - Parte 1 (Implementado)</h2>
+    <p>Archivo: <code>flujo-tendencias-instagram.json</code></p>
+
+    <table>
+      <tr><th>#</th><th>Nodo</th><th>Función</th></tr>
+      <tr><td>1</td><td>Trigger Diario 8am</td><td>Dispara el flujo todos los días a las 8:00am (cron: <code>0 8 * * *</code>)</td></tr>
+      <tr><td>2</td><td>Perplexity - Investigar Tendencias</td><td>Investiga tendencias virales del día en Instagram y TikTok usando el modelo <code>sonar-pro</code></td></tr>
+      <tr><td>3</td><td>Extraer Respuesta Perplexity</td><td>Procesa y limpia la respuesta, agrega la fecha del día</td></tr>
+      <tr><td>4</td><td>DeepSeek - Análisis y Brief</td><td>Analiza las tendencias y genera brief creativo con descripción visual + prompt de IA usando <code>deepseek-chat</code></td></tr>
+      <tr><td>5</td><td>Extraer Respuesta DeepSeek</td><td>Procesa la respuesta y combina con datos de Perplexity</td></tr>
+      <tr><td>6</td><td>Generar HTML para PDF</td><td>Crea un HTML estilizado con el reporte completo del día</td></tr>
+      <tr><td>7</td><td>Convertir a PDF</td><td>Convierte el HTML a PDF via html2pdf.app API</td></tr>
+      <tr><td>8</td><td>Pasar PDF con Fecha</td><td>Pasa el binario PDF al siguiente paso con la fecha</td></tr>
+      <tr><td>9</td><td>Subir a Google Drive</td><td>Sube <code>tendencias_FECHA.pdf</code> a la carpeta configurada de Drive</td></tr>
+      <tr><td>10</td><td>Guardar en Escritorio</td><td>Guarda copia local del PDF en el escritorio de la PC</td></tr>
+    </table>
+
+    <h3>DeepSeek genera en cada brief:</h3>
+    <ul>
+      <li>Resumen ejecutivo de las 3 tendencias más importantes del día</li>
+      <li>Tipo de contenido recomendado: VIDEO o IMAGEN (con justificación)</li>
+      <li>Descripción visual detallada (pose, iluminación, ropa, colores, filtros)</li>
+      <li>Caption completo con emojis y hashtags listos para publicar</li>
+      <li>Horario óptimo de publicación</li>
+      <li>Prompt listo para generadores de IA (Midjourney, Runway, etc.)</li>
+    </ul>
+  </div>
+
+  <!-- 4. API KEYS -->
+  <div class="section green">
+    <h2>🔑 4. API Keys necesarias</h2>
+
+    <table>
+      <tr><th>Servicio</th><th>Dónde obtener</th><th>Costo</th><th>Placeholder en el flujo</th></tr>
+      <tr>
+        <td><strong>Perplexity</strong></td>
+        <td>perplexity.ai → Settings → API</td>
+        <td>~$5/mes uso normal</td>
+        <td><code>TU_API_KEY_PERPLEXITY</code></td>
+      </tr>
+      <tr>
+        <td><strong>DeepSeek</strong></td>
+        <td>platform.deepseek.com → API Keys</td>
+        <td>Muy económico (~$0.001/1K tokens)</td>
+        <td><code>TU_API_KEY_DEEPSEEK</code></td>
+      </tr>
+      <tr>
+        <td><strong>html2pdf.app</strong></td>
+        <td>html2pdf.app → Sign up</td>
+        <td>Free tier: 50 PDFs/mes</td>
+        <td><code>TU_API_KEY_HTML2PDF</code></td>
+      </tr>
+      <tr>
+        <td><strong>Google Drive</strong></td>
+        <td>n8n → Credentials → Google Drive OAuth2</td>
+        <td>Gratis</td>
+        <td>Credencial OAuth2 en n8n</td>
+      </tr>
+    </table>
+
+    <div class="alert">
+      ⚠️ <strong>Google Drive:</strong> También necesitas el Folder ID de la carpeta donde se guardará el PDF. Se obtiene desde la URL de Drive: <code>drive.google.com/drive/folders/<strong>ESTE_ES_EL_ID</strong></code>
+    </div>
+  </div>
+
+  <!-- 5. CÓMO IMPORTAR -->
+  <div class="section orange">
+    <h2>📥 5. Cómo importar el flujo en n8n</h2>
+
+    <h3>Descargar el repositorio</h3>
+    <pre>git clone https://github.com/ezequielvazquezsolis24/flujo-n8n.git
+cd flujo-n8n
+git checkout claude/document-skills-mxkVM</pre>
+
+    <h3>Importar en n8n</h3>
+    <ol>
+      <li>Abrir n8n en el navegador (<code>http://localhost:5678</code>)</li>
+      <li>Ir a <strong>Workflows</strong> → botón <strong>"+"</strong> → <strong>"Import from file"</strong></li>
+      <li>Seleccionar el archivo <code>flujo-tendencias-instagram.json</code></li>
+      <li>Reemplazar los 4 placeholders de API keys</li>
+      <li>Conectar credenciales de Google Drive</li>
+      <li>Ajustar la ruta del escritorio según tu sistema:</li>
+    </ol>
+
+    <table>
+      <tr><th>Sistema</th><th>Ruta del escritorio</th></tr>
+      <tr><td>Linux</td><td><code>/home/TU_USUARIO/Desktop/tendencias_{{ fecha }}.pdf</code></td></tr>
+      <tr><td>Mac</td><td><code>/Users/TU_USUARIO/Desktop/tendencias_{{ fecha }}.pdf</code></td></tr>
+      <tr><td>Windows</td><td><code>C:\Users\TU_USUARIO\Desktop\tendencias_{{ fecha }}.pdf</code></td></tr>
+    </table>
+
+    <ol start="7">
+      <li>Activar el flujo con el toggle de <strong>Active</strong></li>
+      <li>Hacer clic en <strong>"Test workflow"</strong> para verificar que funciona</li>
+    </ol>
+  </div>
+
+  <!-- 6. SIGUIENTE PASO -->
+  <div class="section">
+    <h2>🚀 6. Siguiente Paso - Parte 2 del Flujo (Pendiente)</h2>
+
+    <p>Una vez que la Parte 1 funcione, la Parte 2 completa la automatización total:</p>
+
+    <div class="flow">
+      <div class="flow-step">PDF con Brief</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Claude API</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Prompt Creativo</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Midjourney / Runway</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Instagram API</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">TikTok API</div>
+    </div>
+
+    <h3>Pendiente definir:</h3>
+    <ul>
+      <li>Generador de imágenes: Midjourney, DALL-E, Stable Diffusion o Flux</li>
+      <li>Generador de videos: Runway ML, Kling AI o Pika Labs</li>
+      <li>Cuenta de Instagram Business (necesaria para la API de Meta)</li>
+      <li>Acceso a TikTok API (requiere solicitud de desarrollador)</li>
+    </ul>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <p>📁 Repositorio: <strong>ezequielvazquezsolis24/flujo-n8n</strong> · Rama: <strong>claude/document-skills-mxkVM</strong></p>
+    <p style="margin-top:6px">Para convertir a PDF: abre este archivo en el navegador → Ctrl+P → Guardar como PDF</p>
+  </div>
+
+</body>
+</html>
