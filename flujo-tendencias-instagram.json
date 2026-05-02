@@ -1,0 +1,338 @@
+{
+  "name": "AI Instagram - Tendencias Diarias",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## 🚀 AI Instagram - Tendencias Diarias\n\n**Flujo:** Perplexity → DeepSeek → PDF → Drive → Desktop\n\n**Configurar antes de activar:**\n1. Reemplaza `TU_API_KEY_PERPLEXITY` con tu key de perplexity.ai\n2. Reemplaza `TU_API_KEY_DEEPSEEK` con tu key de deepseek.com\n3. Reemplaza `TU_API_KEY_HTML2PDF` con tu key de html2pdf.app (free tier disponible)\n4. En el nodo Google Drive: conecta tus credenciales OAuth de Google y pon tu Folder ID\n5. En el nodo Desktop: ajusta la ruta a tu escritorio\n\n**Horario:** Todos los días a las 8:00am",
+        "height": 280,
+        "width": 500,
+        "color": 5
+      },
+      "id": "sticky-001",
+      "name": "📋 Instrucciones",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [240, 60]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * *"
+            }
+          ]
+        }
+      },
+      "id": "trigger-001",
+      "name": "Trigger Diario 8am",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.perplexity.ai/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer TU_API_KEY_PERPLEXITY"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"model\": \"sonar-pro\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Eres un experto en tendencias de redes sociales. Investiga y reporta las tendencias mas virales del dia en Instagram y TikTok, especialmente para cuentas de modelos y belleza.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Investiga las tendencias virales de HOY en Instagram y TikTok para una cuenta de modelo creada por IA. Necesito que me des: 1) Top 5 temas trending del dia, 2) Hashtags mas usados (al menos 10), 3) Tipo de contenido mas viral hoy (foto, video, reel), 4) Estetica visual dominante (colores, filtros, estilos), 5) Horarios de mayor engagement, 6) Audios o musicas trending para reels. Responde de forma muy detallada y estructurada.\"\n    }\n  ]\n}",
+        "options": {}
+      },
+      "id": "perplexity-001",
+      "name": "Perplexity - Investigar Tendencias",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [480, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "const response = $input.first().json;\nconst content = response.choices[0].message.content;\nconst fecha = new Date().toLocaleDateString('es-AR', {\n  year: 'numeric',\n  month: '2-digit',\n  day: '2-digit'\n}).replace(/\\//g, '-');\n\nreturn [{\n  json: {\n    perplexity_trends: content,\n    fecha: fecha\n  }\n}];"
+      },
+      "id": "code-extract-perplexity",
+      "name": "Extraer Respuesta Perplexity",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [700, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.deepseek.com/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer TU_API_KEY_DEEPSEEK"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"deepseek-chat\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Eres un director creativo experto en marketing digital para modelos de IA en Instagram y TikTok. Analizas tendencias y creas briefs de contenido detallados, especificando exactamente que publicar, como hacerlo y cuando.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Basandote en estas tendencias del dia:\\n\\n{{ $json.perplexity_trends }}\\n\\nCrea un brief de contenido completo para hoy con:\\n1) RESUMEN EJECUTIVO: Las 3 tendencias mas importantes para aprovechar HOY\\n2) TIPO DE CONTENIDO: Define si hacer VIDEO o IMAGEN (justifica con datos)\\n3) DESCRIPCION VISUAL DETALLADA: Describe exactamente como debe verse el contenido (pose, iluminacion, ropa, fondo, colores, filtros, estetica)\\n4) CAPTION: Texto completo para publicar con emojis y hashtags\\n5) HORARIO OPTIMO: Mejor hora y dia para publicar\\n6) PROMPT DE IA: Un prompt detallado listo para usar en generadores de imagen/video IA (Midjourney, Runway, etc.)\\n\\nSe muy especifico y creativo. Este contenido es para una modelo creada por IA.\"\n    }\n  ]\n}",
+        "options": {}
+      },
+      "id": "deepseek-001",
+      "name": "DeepSeek - Analisis y Brief",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [920, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "const response = $input.first().json;\nconst deepseekContent = response.choices[0].message.content;\nconst perplexityData = $('Extraer Respuesta Perplexity').first().json;\n\nreturn [{\n  json: {\n    deepseek_brief: deepseekContent,\n    perplexity_trends: perplexityData.perplexity_trends,\n    fecha: perplexityData.fecha\n  }\n}];"
+      },
+      "id": "code-extract-deepseek",
+      "name": "Extraer Respuesta DeepSeek",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1140, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\nconst fecha = data.fecha;\nconst trends = (data.perplexity_trends || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');\nconst brief = (data.deepseek_brief || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');\n\nconst trendsHtml = trends.split('\\n').map(line => `<p>${line}</p>`).join('');\nconst briefHtml = brief.split('\\n').map(line => `<p>${line}</p>`).join('');\n\nconst html = `<!DOCTYPE html>\n<html lang=\"es\">\n<head>\n  <meta charset=\"UTF-8\">\n  <style>\n    * { box-sizing: border-box; }\n    body { font-family: 'Arial', sans-serif; margin: 0; padding: 40px; color: #333; background: #fff; }\n    .header { background: linear-gradient(135deg, #e91e8c, #9c27b0); color: white; padding: 30px; border-radius: 12px; margin-bottom: 30px; }\n    .header h1 { margin: 0; font-size: 28px; }\n    .header p { margin: 8px 0 0 0; opacity: 0.9; font-size: 14px; }\n    .section { margin: 25px 0; padding: 25px; background: #f8f9fa; border-radius: 12px; border-left: 4px solid #e91e8c; }\n    .section h2 { color: #9c27b0; margin-top: 0; font-size: 20px; }\n    .section p { line-height: 1.7; margin: 6px 0; }\n    .badge { display: inline-block; background: #e91e8c; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; margin-bottom: 10px; }\n    .footer { text-align: center; margin-top: 40px; color: #aaa; font-size: 12px; }\n  </style>\n</head>\n<body>\n  <div class=\"header\">\n    <h1>📊 Reporte de Tendencias IA</h1>\n    <p>Generado automaticamente el ${fecha} • AI Instagram Model</p>\n  </div>\n\n  <div class=\"section\">\n    <span class=\"badge\">🔍 PERPLEXITY</span>\n    <h2>Investigacion de Tendencias del Dia</h2>\n    ${trendsHtml}\n  </div>\n\n  <div class=\"section\">\n    <span class=\"badge\">🤖 DEEPSEEK</span>\n    <h2>Brief Creativo y Directrices de Contenido</h2>\n    ${briefHtml}\n  </div>\n\n  <div class=\"footer\">\n    <p>Flujo automatizado n8n • AI Instagram Model • ${fecha}</p>\n  </div>\n</body>\n</html>`;\n\nreturn [{ json: { html_content: html, fecha } }];"
+      },
+      "id": "code-generate-html",
+      "name": "Generar HTML para PDF",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1360, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.html2pdf.app/v1/generate",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"html\": {{ JSON.stringify($json.html_content) }},\n  \"apiKey\": \"TU_API_KEY_HTML2PDF\",\n  \"pdf\": {\n    \"format\": \"A4\",\n    \"margin\": { \"top\": \"10mm\", \"bottom\": \"10mm\", \"left\": \"10mm\", \"right\": \"10mm\" }\n  }\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "data"
+            }
+          }
+        }
+      },
+      "id": "pdf-convert-001",
+      "name": "Convertir a PDF",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1580, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "const pdfData = $input.first().binary;\nconst htmlData = $('Generar HTML para PDF').first().json;\nreturn [{\n  json: { fecha: htmlData.fecha },\n  binary: pdfData\n}];"
+      },
+      "id": "code-pass-pdf",
+      "name": "Pasar PDF con Fecha",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1800, 400]
+    },
+    {
+      "parameters": {
+        "operation": "upload",
+        "name": "=tendencias_{{ $json.fecha }}.pdf",
+        "folderId": "TU_FOLDER_ID_DE_GOOGLE_DRIVE",
+        "inputDataFieldName": "data",
+        "options": {}
+      },
+      "id": "gdrive-001",
+      "name": "Subir a Google Drive",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [2020, 300],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "CONFIGURAR_CREDENCIAL_GOOGLE",
+          "name": "Google Drive OAuth2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fileName": "=/root/Desktop/tendencias_{{ $json.fecha }}.pdf",
+        "dataPropertyName": "data",
+        "options": {}
+      },
+      "id": "desktop-save-001",
+      "name": "Guardar en Escritorio",
+      "type": "n8n-nodes-base.writeBinaryFile",
+      "typeVersion": 1,
+      "position": [2020, 500]
+    },
+    {
+      "parameters": {
+        "content": "## 📁 Ruta del Escritorio\n\n**Linux/Mac:** `/root/Desktop/` o `/home/TU_USUARIO/Desktop/`\n\n**Windows:** `C:\\Users\\TU_USUARIO\\Desktop\\`\n\nCambia la ruta en el nodo **'Guardar en Escritorio'** según tu sistema operativo.",
+        "height": 180,
+        "width": 300,
+        "color": 3
+      },
+      "id": "sticky-desktop",
+      "name": "Nota Desktop",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [2020, 620]
+    },
+    {
+      "parameters": {
+        "content": "## 🔑 Obtener API Keys\n\n**Perplexity:** perplexity.ai → Settings → API\n\n**DeepSeek:** platform.deepseek.com → API Keys\n\n**html2pdf.app:** html2pdf.app → Sign up (free tier: 50 PDFs/mes)\n\n**Google Drive:** n8n → Credentials → Google Drive OAuth2",
+        "height": 220,
+        "width": 300,
+        "color": 4
+      },
+      "id": "sticky-keys",
+      "name": "Nota API Keys",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [780, 60]
+    }
+  ],
+  "connections": {
+    "Trigger Diario 8am": {
+      "main": [
+        [
+          {
+            "node": "Perplexity - Investigar Tendencias",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Perplexity - Investigar Tendencias": {
+      "main": [
+        [
+          {
+            "node": "Extraer Respuesta Perplexity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer Respuesta Perplexity": {
+      "main": [
+        [
+          {
+            "node": "DeepSeek - Analisis y Brief",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DeepSeek - Analisis y Brief": {
+      "main": [
+        [
+          {
+            "node": "Extraer Respuesta DeepSeek",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer Respuesta DeepSeek": {
+      "main": [
+        [
+          {
+            "node": "Generar HTML para PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generar HTML para PDF": {
+      "main": [
+        [
+          {
+            "node": "Convertir a PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convertir a PDF": {
+      "main": [
+        [
+          {
+            "node": "Pasar PDF con Fecha",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pasar PDF con Fecha": {
+      "main": [
+        [
+          {
+            "node": "Subir a Google Drive",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Guardar en Escritorio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": [
+    {
+      "name": "instagram",
+      "createdAt": "2026-05-02T00:00:00.000Z"
+    },
+    {
+      "name": "tendencias",
+      "createdAt": "2026-05-02T00:00:00.000Z"
+    },
+    {
+      "name": "ai-model",
+      "createdAt": "2026-05-02T00:00:00.000Z"
+    }
+  ]
+}
