@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resumen — Derivadas Implícitas y Máximos y Mínimos</title>
+
+  <!-- MathJax para fórmulas matemáticas -->
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #1a1a1a;
+      background: #fff;
+      padding: 50px;
+      max-width: 860px;
+      margin: 0 auto;
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    /* PORTADA */
+    .cover {
+      background: linear-gradient(135deg, #1565c0, #283593, #4a148c);
+      color: white;
+      padding: 50px 40px;
+      border-radius: 16px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    .cover h1 { font-size: 28px; margin-bottom: 8px; }
+    .cover p { opacity: 0.88; font-size: 15px; }
+    .cover .meta { margin-top: 16px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .cover .meta span { background: rgba(255,255,255,0.18); padding: 4px 16px; border-radius: 20px; font-size: 13px; }
+
+    /* ÍNDICE */
+    .toc { background: #f3f6fd; border-radius: 12px; padding: 22px 28px; margin-bottom: 36px; }
+    .toc h3 { color: #1565c0; margin-bottom: 12px; font-size: 16px; }
+    .toc ol { padding-left: 20px; }
+    .toc li { margin: 6px 0; }
+    .toc a { color: #1565c0; text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+
+    /* SECCIONES */
+    .seccion { margin: 40px 0; }
+    .seccion-titulo {
+      background: linear-gradient(90deg, #1565c0, #283593);
+      color: white;
+      padding: 14px 24px;
+      border-radius: 10px;
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 24px;
+    }
+    .seccion-titulo span { opacity: 0.7; font-size: 14px; margin-left: 10px; font-weight: normal; }
+
+    /* SUBSECCIONES */
+    h3 {
+      font-size: 17px;
+      color: #1565c0;
+      border-bottom: 2px solid #e3f2fd;
+      padding-bottom: 6px;
+      margin: 28px 0 14px 0;
+    }
+    h4 { font-size: 15px; color: #283593; margin: 18px 0 8px 0; }
+
+    /* CAJAS */
+    .box {
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin: 16px 0;
+    }
+    .box.def    { background: #e3f2fd; border-left: 5px solid #1565c0; }
+    .box.regla  { background: #f3e5f5; border-left: 5px solid #7b1fa2; }
+    .box.tip    { background: #e8f5e9; border-left: 5px solid #2e7d32; }
+    .box.warn   { background: #fff8e1; border-left: 5px solid #f57f17; }
+    .box.resumen{ background: #fce4ec; border-left: 5px solid #c62828; }
+
+    .box-titulo { font-weight: bold; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; opacity: 0.75; }
+
+    /* EJEMPLOS */
+    .ejemplo {
+      background: #f9f9f9;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin: 18px 0;
+    }
+    .ejemplo-titulo {
+      font-weight: bold;
+      color: #1565c0;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    .paso { margin: 10px 0 10px 16px; }
+    .paso::before { content: "→ "; color: #1565c0; font-weight: bold; }
+
+    /* TABLA */
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+    th { background: #1565c0; color: white; padding: 10px 16px; text-align: left; }
+    td { padding: 10px 16px; border-bottom: 1px solid #eee; }
+    tr:nth-child(even) td { background: #f5f5f5; }
+    td.center, th.center { text-align: center; }
+
+    /* FÓRMULA DESTACADA */
+    .formula {
+      background: #fff;
+      border: 2px solid #1565c0;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin: 16px 0;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    /* PROCEDIMIENTO */
+    .procedimiento {
+      counter-reset: paso-counter;
+      list-style: none;
+      padding: 0;
+      margin: 14px 0;
+    }
+    .procedimiento li {
+      counter-increment: paso-counter;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .procedimiento li::before {
+      content: counter(paso-counter);
+      background: #1565c0;
+      color: white;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: bold;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* FOOTER */
+    .footer { text-align: center; margin-top: 50px; padding: 20px; color: #aaa; font-size: 12px; border-top: 1px solid #eee; }
+
+    @media print {
+      body { padding: 20px; }
+      .seccion { break-inside: avoid; }
+      .ejemplo { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div class="cover">
+  <h1>📐 Cálculo Diferencial</h1>
+  <p>Resumen completo con definiciones, reglas, procedimientos y ejemplos resueltos</p>
+  <div class="meta">
+    <span>Derivadas Implícitas</span>
+    <span>Máximos y Mínimos</span>
+    <span>Criterio de la 1ª Derivada</span>
+    <span>Criterio de la 2ª Derivada</span>
+  </div>
+</div>
+
+<!-- ÍNDICE -->
+<div class="toc">
+  <h3>📋 Contenido</h3>
+  <ol>
+    <li><a href="#derivadas-implicitas">Derivadas Implícitas</a>
+      <ol>
+        <li><a href="#def-implicita">¿Qué es una función implícita?</a></li>
+        <li><a href="#regla-implicita">Regla de la cadena aplicada</a></li>
+        <li><a href="#proc-implicita">Procedimiento paso a paso</a></li>
+        <li><a href="#ej-implicita">Ejemplos resueltos</a></li>
+      </ol>
+    </li>
+    <li><a href="#max-min">Máximos y Mínimos</a>
+      <ol>
+        <li><a href="#puntos-criticos">Puntos críticos</a></li>
+        <li><a href="#primera-derivada">Criterio de la 1ª derivada</a></li>
+        <li><a href="#segunda-derivada">Criterio de la 2ª derivada</a></li>
+        <li><a href="#absolutos">Máximos y mínimos absolutos</a></li>
+        <li><a href="#ej-maxmin">Ejemplos resueltos</a></li>
+      </ol>
+    </li>
+    <li><a href="#resumen-final">Resumen rápido para el examen</a></li>
+  </ol>
+</div>
+
+
+<!-- ===================================================================== -->
+<!--  PARTE 1: DERIVADAS IMPLÍCITAS                                         -->
+<!-- ===================================================================== -->
+<div class="seccion" id="derivadas-implicitas">
+  <div class="seccion-titulo">1. Derivadas Implícitas <span>implicit differentiation</span></div>
+
+  <!-- 1.1 Definición -->
+  <h3 id="def-implicita">1.1 ¿Qué es una función implícita?</h3>
+
+  <div class="box def">
+    <div class="box-titulo">📖 Definición</div>
+    <p>Una función es <strong>explícita</strong> cuando $y$ está despejada: $y = f(x)$</p>
+    <p style="margin-top:8px">Una función es <strong>implícita</strong> cuando $x$ e $y$ están mezcladas en una ecuación y <em>no es posible o conveniente</em> despejar $y$:</p>
+    <p style="margin-top:8px; text-align:center">$F(x,\, y) = 0$</p>
+  </div>
+
+  <p><strong>Ejemplos de funciones implícitas:</strong></p>
+  <ul style="margin:10px 0 10px 22px">
+    <li>$x^2 + y^2 = 25$ &nbsp;(circunferencia)</li>
+    <li>$x^3 + y^3 = 6xy$</li>
+    <li>$\sin(xy) = x + y$</li>
+    <li>$e^y + xy = 1$</li>
+  </ul>
+
+  <!-- 1.2 Regla -->
+  <h3 id="regla-implicita">1.2 Regla clave — Regla de la cadena</h3>
+
+  <div class="box regla">
+    <div class="box-titulo">⚙️ Regla fundamental</div>
+    <p>Al diferenciar respecto a $x$, tratamos $y$ como una función de $x$. Por la <strong>regla de la cadena</strong>:</p>
+    <div class="formula">
+      $\dfrac{d}{dx}[f(y)] = f'(y) \cdot \dfrac{dy}{dx}$
+    </div>
+    <p>Casos más comunes:</p>
+    <ul style="margin:10px 0 0 22px">
+      <li>$\dfrac{d}{dx}[y^n] = n\,y^{n-1}\cdot\dfrac{dy}{dx}$</li>
+      <li style="margin-top:8px">$\dfrac{d}{dx}[\sin y] = \cos y \cdot \dfrac{dy}{dx}$</li>
+      <li style="margin-top:8px">$\dfrac{d}{dx}[e^y] = e^y \cdot \dfrac{dy}{dx}$</li>
+      <li style="margin-top:8px">$\dfrac{d}{dx}[xy] = y + x\,\dfrac{dy}{dx}$ &nbsp; (regla del producto)</li>
+    </ul>
+  </div>
+
+  <!-- 1.3 Procedimiento -->
+  <h3 id="proc-implicita">1.3 Procedimiento paso a paso</h3>
+
+  <ol class="procedimiento">
+    <li>Diferencia <strong>ambos lados</strong> de la ecuación respecto a $x$</li>
+    <li>Cada vez que derives un término con $y$, multiplica por $\dfrac{dy}{dx}$</li>
+    <li>Agrupa todos los términos con $\dfrac{dy}{dx}$ en un lado</li>
+    <li>Factoriza $\dfrac{dy}{dx}$</li>
+    <li>Despeja $\dfrac{dy}{dx}$</li>
+  </ol>
+
+  <!-- 1.4 Ejemplos -->
+  <h3 id="ej-implicita">1.4 Ejemplos resueltos</h3>
+
+  <div class="ejemplo">
+    <div class="ejemplo-titulo">Ejemplo 1 — Circunferencia: $x^2 + y^2 = 25$</div>
+    <div class="paso">Diferenciar ambos lados: $\dfrac{d}{dx}[x^2] + \dfrac{d}{dx}[y^2] = \dfrac{d}{dx}[25]$</div>
+    <div class="paso">Aplicar regla de la cadena en $y^2$: $2x + 2y\,\dfrac{dy}{dx} = 0$</div>
+    <div class="paso">Despejar $\dfrac{dy}{dx}$: $2y\,\dfrac{dy}{dx} = -2x$</div>
+    <div class="paso" style="color:#1565c0; font-weight:bold">$\boxed{\dfrac{dy}{dx} = -\dfrac{x}{y}}$</div>
+  </div>
+
+  <div class="ejemplo">
+    <div class="ejemplo-titulo">Ejemplo 2 — Producto mixto: $x^3 + y^3 = 6xy$</div>
+    <div class="paso">Diferenciar: $3x^2 + 3y^2\,\dfrac{dy}{dx} = 6\!\left(y + x\,\dfrac{dy}{dx}\right)$</div>
+    <div class="paso">Expandir: $3x^2 + 3y^2\,\dfrac{dy}{dx} = 6y + 6x\,\dfrac{dy}{dx}$</div>
+    <div class="paso">Agrupar términos con $\dfrac{dy}{dx}$: $3y^2\,\dfrac{dy}{dx} - 6x\,\dfrac{dy}{dx} = 6y - 3x^2$</div>
+    <div class="paso">Factorizar: $\dfrac{dy}{dx}(3y^2 - 6x) = 6y - 3x^2$</div>
+    <div class="paso" style="color:#1565c0; font-weight:bold">$\boxed{\dfrac{dy}{dx} = \dfrac{6y - 3x^2}{3y^2 - 6x} = \dfrac{2y - x^2}{y^2 - 2x}}$</div>
+  </div>
+
+  <div class="ejemplo">
+    <div class="ejemplo-titulo">Ejemplo 3 — Con función trigonométrica: $\sin(x + y) = x$</div>
+    <div class="paso">Diferenciar: $\cos(x+y)\cdot\dfrac{d}{dx}[x+y] = 1$</div>
+    <div class="paso">Expandir: $\cos(x+y)\cdot\!\left(1 + \dfrac{dy}{dx}\right) = 1$</div>
+    <div class="paso">Distribuir: $\cos(x+y) + \cos(x+y)\,\dfrac{dy}{dx} = 1$</div>
+    <div class="paso">Despejar: $\cos(x+y)\,\dfrac{dy}{dx} = 1 - \cos(x+y)$</div>
+    <div class="paso" style="color:#1565c0; font-weight:bold">$\boxed{\dfrac{dy}{dx} = \dfrac{1 - \cos(x+y)}{\cos(x+y)}}$</div>
+  </div>
+
+  <div class="box tip">
+    <div class="box-titulo">💡 Tip para el examen</div>
+    <p>Si te piden la <strong>pendiente de la tangente</strong> en un punto $(x_0, y_0)$: calculá $\dfrac{dy}{dx}$ y sustituí los valores del punto al final.</p>
+  </div>
+</div>
+
+
+<!-- ===================================================================== -->
+<!--  PARTE 2: MÁXIMOS Y MÍNIMOS                                            -->
+<!-- ===================================================================== -->
+<div class="seccion" id="max-min">
+  <div class="seccion-titulo">2. Máximos y Mínimos <span>optimization</span></div>
+
+  <!-- 2.1 Puntos críticos -->
+  <h3 id="puntos-criticos">2.1 Puntos críticos</h3>
+
+  <div class="box def">
+    <div class="box-titulo">📖 Definición</div>
+    <p>$c$ es un <strong>punto crítico</strong> de $f$ si $c$ está en el dominio de $f$ y se cumple alguna de estas condiciones:</p>
+    <ul style="margin:10px 0 0 22px">
+      <li>$f'(c) = 0$ &nbsp; (la derivada se anula)</li>
+      <li>$f'(c)$ no existe &nbsp; (la derivada no está definida en ese punto)</li>
+    </ul>
+  </div>
+
+  <div class="box warn">
+    <div class="box-titulo">⚠️ Importante</div>
+    <p>Todo máximo o mínimo relativo ocurre en un punto crítico, pero <strong>no todo punto crítico es un máximo o mínimo</strong>. Puede ser un punto de inflexión.</p>
+  </div>
+
+  <!-- 2.2 Primera derivada -->
+  <h3 id="primera-derivada">2.2 Criterio de la Primera Derivada</h3>
+
+  <div class="box regla">
+    <div class="box-titulo">⚙️ Criterio</div>
+    <p>Sea $c$ un punto crítico de $f$. Al evaluar $f'(x)$ en un intervalo alrededor de $c$:</p>
+  </div>
+
+  <table>
+    <tr>
+      <th class="center">$f'$ antes de $c$</th>
+      <th class="center">$f'$ después de $c$</th>
+      <th class="center">Conclusión</th>
+    </tr>
+    <tr>
+      <td class="center">$+$ (creciente)</td>
+      <td class="center">$-$ (decreciente)</td>
+      <td class="center">🔴 <strong>Máximo local</strong></td>
+    </tr>
+    <tr>
+      <td class="center">$-$ (decreciente)</td>
+      <td class="center">$+$ (creciente)</td>
+      <td class="center">🔵 <strong>Mínimo local</strong></td>
+    </tr>
+    <tr>
+      <td class="center">No cambia signo</td>
+      <td class="center">No cambia signo</td>
+      <td class="center">⚪ Punto de inflexión</td>
+    </tr>
+  </table>
+
+  <!-- 2.3 Segunda derivada -->
+  <h3 id="segunda-derivada">2.3 Criterio de la Segunda Derivada</h3>
+
+  <div class="box regla">
+    <div class="box-titulo">⚙️ Criterio</div>
+    <p>Si $f'(c) = 0$, evaluar $f''(c)$:</p>
+  </div>
+
+  <table>
+    <tr>
+      <th class="center">$f''(c)$</th>
+      <th class="center">Concavidad</th>
+      <th class="center">Conclusión</th>
+    </tr>
+    <tr>
+      <td class="center">$f''(c) < 0$</td>
+      <td class="center">Cóncava hacia abajo ∩</td>
+      <td class="center">🔴 <strong>Máximo local</strong></td>
+    </tr>
+    <tr>
+      <td class="center">$f''(c) > 0$</td>
+      <td class="center">Cóncava hacia arriba ∪</td>
+      <td class="center">🔵 <strong>Mínimo local</strong></td>
+    </tr>
+    <tr>
+      <td class="center">$f''(c) = 0$</td>
+      <td class="center">Indeterminado</td>
+      <td class="center">⚪ Usar criterio de 1ª derivada</td>
+    </tr>
+  </table>
+
+  <div class="formula">
+    Regla mnemotécnica: &nbsp; $f'' < 0$ → la función "llora" (∩ = máximo) &nbsp;|&nbsp; $f'' > 0$ → la función "sonríe" (∪ = mínimo)
+  </div>
+
+  <!-- 2.4 Absolutos -->
+  <h3 id="absolutos">2.4 Máximos y Mínimos Absolutos en $[a, b]$</h3>
+
+  <div class="box def">
+    <div class="box-titulo">📖 Método del intervalo cerrado</div>
+    <p>Para encontrar el máximo y mínimo <strong>absoluto</strong> de $f$ continua en $[a,b]$:</p>
+  </div>
+
+  <ol class="procedimiento">
+    <li>Encontrar todos los puntos críticos de $f$ en el intervalo abierto $(a,b)$</li>
+    <li>Evaluar $f$ en cada punto crítico</li>
+    <li>Evaluar $f$ en los extremos: $f(a)$ y $f(b)$</li>
+    <li>El valor <strong>mayor</strong> es el máximo absoluto</li>
+    <li>El valor <strong>menor</strong> es el mínimo absoluto</li>
+  </ol>
+
+  <!-- 2.5 Ejemplos -->
+  <h3 id="ej-maxmin">2.5 Ejemplos resueltos</h3>
+
+  <div class="ejemplo">
+    <div class="ejemplo-titulo">Ejemplo 1 — Puntos críticos y clasificación: $f(x) = x^3 - 3x^2 - 9x + 5$</div>
+    <div class="paso"><strong>Paso 1 — Primera derivada:</strong> $f'(x) = 3x^2 - 6x - 9$</div>
+    <div class="paso"><strong>Paso 2 — Igualar a cero:</strong> $3x^2 - 6x - 9 = 0 \Rightarrow x^2 - 2x - 3 = 0 \Rightarrow (x-3)(x+1) = 0$</div>
+    <div class="paso"><strong>Puntos críticos:</strong> $x = 3$ y $x = -1$</div>
+    <div class="paso"><strong>Paso 3 — Segunda derivada:</strong> $f''(x) = 6x - 6$</div>
+    <div class="paso">
+      En $x = -1$: $f''(-1) = -12 < 0$ → <span style="color:#c62828"><strong>Máximo local</strong></span> en $(-1,\; f(-1)) = (-1,\; 10)$<br>
+      En $x = 3$: $f''(3) = 12 > 0$ → <span style="color:#1565c0"><strong>Mínimo local</strong></span> en $(3,\; f(3)) = (3,\; -22)$
+    </div>
+  </div>
+
+  <div class="ejemplo">
+    <div class="ejemplo-titulo">Ejemplo 2 — Máximo y mínimo absoluto en $[-2, 4]$: $f(x) = x^3 - 6x^2 + 1$</div>
+    <div class="paso"><strong>Paso 1:</strong> $f'(x) = 3x^2 - 12x = 3x(x - 4) = 0$ → puntos críticos: $x = 0$ y $x = 4$</div>
+    <div class="paso"><strong>Paso 2 — Evaluar en puntos críticos y extremos:</strong></div>
+    <table style="margin:10px 0 10px 16px; width:auto">
+      <tr><th>$x$</th><th>$f(x)$</th><th></th></tr>
+      <tr><td>$-2$ (extremo)</td><td>$(-2)^3 - 6(4) + 1 = -31$</td><td></td></tr>
+      <tr><td>$0$ (crítico)</td><td>$0 - 0 + 1 = 1$</td><td></td></tr>
+      <tr><td>$4$ (crítico y extremo)</td><td>$64 - 96 + 1 = -31$</td><td></td></tr>
+    </table>
+    <div class="paso" style="color:#c62828; font-weight:bold">Máximo absoluto: $f(0) = 1$</div>
+    <div class="paso" style="color:#1565c0; font-weight:bold">Mínimo absoluto: $f(-2) = f(4) = -31$</div>
+  </div>
+
+  <div class="ejemplo">
+    <div class="ejemplo-titulo">Ejemplo 3 — Criterio de la 1ª derivada: $f(x) = x^4 - 4x^3$</div>
+    <div class="paso">$f'(x) = 4x^3 - 12x^2 = 4x^2(x - 3)$ → puntos críticos: $x = 0$ y $x = 3$</div>
+    <div class="paso">Tabla de signos de $f'(x)$:</div>
+    <table style="margin:10px 0 10px 16px">
+      <tr><th>Intervalo</th><th>Signo de $f'$</th><th>$f$ es...</th></tr>
+      <tr><td>$x < 0$</td><td>$-$</td><td>Decreciente</td></tr>
+      <tr><td>$0 < x < 3$</td><td>$-$</td><td>Decreciente</td></tr>
+      <tr><td>$x > 3$</td><td>$+$</td><td>Creciente</td></tr>
+    </table>
+    <div class="paso">En $x = 0$: $f'$ no cambia de signo → <strong>punto de inflexión</strong> (no es extremo)</div>
+    <div class="paso" style="color:#1565c0; font-weight:bold">En $x = 3$: $f'$ pasa de $-$ a $+$ → <strong>Mínimo local</strong> en $(3,\; -27)$</div>
+  </div>
+</div>
+
+
+<!-- ===================================================================== -->
+<!--  RESUMEN FINAL                                                         -->
+<!-- ===================================================================== -->
+<div class="seccion" id="resumen-final">
+  <div class="seccion-titulo">3. Resumen rápido para el examen</div>
+
+  <div class="box resumen">
+    <div class="box-titulo">🔴 Derivadas Implícitas — Checklist</div>
+    <ul style="margin:0 0 0 18px">
+      <li>Identificar que no se puede despejar $y$ fácilmente</li>
+      <li>Derivar ambos lados respecto a $x$</li>
+      <li>Poner $\dfrac{dy}{dx}$ cada vez que derives algo con $y$</li>
+      <li>Agrupar, factorizar y despejar $\dfrac{dy}{dx}$</li>
+      <li>Si piden pendiente en un punto: sustituir $(x_0, y_0)$</li>
+    </ul>
+  </div>
+
+  <div class="box resumen" style="background:#e8eaf6; border-left-color:#283593">
+    <div class="box-titulo" style="color:#283593">🔵 Máximos y Mínimos — Checklist</div>
+    <ul style="margin:0 0 0 18px">
+      <li>Calcular $f'(x)$ e igualar a cero para encontrar puntos críticos</li>
+      <li>Aplicar criterio de 2ª derivada (más rápido) o de 1ª derivada</li>
+      <li>Si $f''(c) < 0$ → máximo &nbsp;|&nbsp; Si $f''(c) > 0$ → mínimo</li>
+      <li>Para absolutos en $[a,b]$: evaluar en críticos + extremos</li>
+      <li>Si $f''(c) = 0$: usar tabla de signos de $f'$</li>
+    </ul>
+  </div>
+
+  <table>
+    <tr>
+      <th colspan="3" style="text-align:center">Comparativa rápida de criterios</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th class="center">Criterio 1ª Derivada</th>
+      <th class="center">Criterio 2ª Derivada</th>
+    </tr>
+    <tr>
+      <td><strong>Ventaja</strong></td>
+      <td>Funciona siempre</td>
+      <td>Más rápido de aplicar</td>
+    </tr>
+    <tr>
+      <td><strong>Desventaja</strong></td>
+      <td>Requiere tabla de signos</td>
+      <td>Falla si $f''(c) = 0$</td>
+    </tr>
+    <tr>
+      <td><strong>Cuándo usarlo</strong></td>
+      <td>Cuando $f''(c) = 0$ o $f''$ es difícil</td>
+      <td>Caso general (más común en exámenes)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p>Para guardar como PDF: Ctrl+P → Guardar como PDF · Repositorio: <strong>ezequielvazquezsolis24/flujo-n8n</strong></p>
+</div>
+
+</body>
+</html>
